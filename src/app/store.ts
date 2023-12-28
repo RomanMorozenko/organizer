@@ -3,6 +3,7 @@ import { todolistsReducer } from "features/todolists-list/todolists/todolists.re
 import { appReducer } from "app/app.reducer";
 import { authReducer } from "features/auth/auth.reducer";
 import { configureStore } from "@reduxjs/toolkit";
+import { weatherReducer } from "features/weather/weather.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     todolists: todolistsReducer,
     app: appReducer,
     auth: authReducer,
+    weather: weatherReducer,
   },
 });
 

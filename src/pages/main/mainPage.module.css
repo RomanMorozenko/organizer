@@ -1,0 +1,42 @@
+
+.mainPageContainer{
+    margin-top: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainPageItem {
+    width: 400px;
+    height: 200px;
+    background-size: cover ;
+    background-position: center;
+    box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.75);
+}
+
+.mainPageItem:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 7px 1px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 7px 1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 7px 1px rgba(0,0,0,0.75);
+}
+
+.todolist {
+    background-image: url('../../assets/images/todo.png');
+}
+
+.weather {
+    background-image: url('../../assets/images/forecast.png');
+}
+
+.currency {
+    background-image: url('../../assets/images/currency.png');
+}
+
+.crypto {
+    background-image: url('../../assets/images/btc.png');
+}

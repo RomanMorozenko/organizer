@@ -28,24 +28,23 @@ export const tasksAPI = {
   },
 };
 
-
 // types
-export const TaskStatusesObj =  {
-  New :0,
-  InProgress :1,
-  Completed :2,
-  Draft :3,
-} as const
-export type TaskStatuses = typeof TaskStatusesObj[keyof typeof TaskStatusesObj];
-
-export const TaskPrioritiesObject =  {
-  Low :0,
-  Middle :1,
-  Hi :2,
-  Urgently :3,
-  Later :4,
+export const TaskStatusesObj = {
+  New: 0,
+  InProgress: 1,
+  Completed: 2,
+  Draft: 3,
 } as const;
-export type TaskPriorities = typeof TaskPrioritiesObject[keyof typeof TaskPrioritiesObject];
+export type TaskStatuses = (typeof TaskStatusesObj)[keyof typeof TaskStatusesObj];
+
+export const TaskPrioritiesObject = {
+  Low: 0,
+  Middle: 1,
+  Hi: 2,
+  Urgently: 3,
+  Later: 4,
+} as const;
+export type TaskPriorities = (typeof TaskPrioritiesObject)[keyof typeof TaskPrioritiesObject];
 
 export type TaskType = {
   description: string;

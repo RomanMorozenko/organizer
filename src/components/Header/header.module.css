@@ -1,0 +1,11 @@
+.toolbar {
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+  gap: 10px;
+}
+
+.menuItemName {
+  font-size: 14px;
+}
+

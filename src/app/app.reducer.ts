@@ -1,7 +1,7 @@
 import { authAPI } from "common/api/todolists-api";
 import { authActions } from "features/auth/auth.reducer";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createAppAsyncThunk } from 'common/utils/create-app-async-thunk';
+import { createAppAsyncThunk } from "common/utils/create-app-async-thunk";
 // import { handleServerNetworkError } from "common/utils/error-utils";
 
 const initialState = {
@@ -21,68 +21,66 @@ const slice = createSlice({
       state.error = action.payload.error;
     },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
-    .addCase(initializeAppTC.fulfilled, (state, action) => {
-      state.isInitialized = action.payload.isInitialized;
-    })
-    .addMatcher(
-      (action) => {
-        return action.type.endsWith('/pending')
-      },
-      (state,action) => {
-        console.log(action)
-        state.status = 'loading'
-      }
-    )
-    .addMatcher(
-      (action) => {
-        return action.type.endsWith('/fulfilled')
-      },
-      (state,action) => {
-        console.log(action)
-        state.status = 'succeeded'
-      }
-    )
-    .addMatcher(
-      (action) => {
-        return action.type.endsWith('/rejected')
-      },
-      (state,action) => {
-        console.log('addMatcher rejected')
-        console.log(action)
-        if (action.payload) {
-          state.error = action.payload.messages[0]
-        } else {
-          state.error = action.error.message ? action.error.message : 'Some error occurred'
+      .addCase(initializeAppTC.fulfilled, (state, action) => {
+        state.isInitialized = action.payload.isInitialized;
+      })
+      .addMatcher(
+        (action) => {
+          return action.type.endsWith("/pending");
+        },
+        (state, action) => {
+          state.status = "loading";
         }
-        state.status = 'failed'
-      }
-    )
-  }
+      )
+      .addMatcher(
+        (action) => {
+          return action.type.endsWith("/fulfilled");
+        },
+        (state, action) => {
+          state.status = "succeeded";
+        }
+      )
+      .addMatcher(
+        (action) => {
+          return action.type.endsWith("/rejected");
+        },
+        (state, action) => {
+          console.log("addMatcher rejected");
+          console.log(action);
+          if (action.payload) {
+            state.error = action.payload.messages[0];
+          } else {
+            state.error = action.error.message ? action.error.message : "Some error occurred";
+          }
+          state.status = "failed";
+        }
+      );
+  },
 });
 
 export const appReducer = slice.reducer;
 export const appActions = slice.actions;
 
-
-export const initializeAppTC = createAppAsyncThunk<{ isInitialized: boolean }>('app/initializeApp',
+export const initializeAppTC = createAppAsyncThunk<{ isInitialized: boolean }>(
+  "app/initializeApp",
   async (arg, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI;
     try {
-      const res = await authAPI.me()
+      const res = await authAPI.me();
       if (res.data.resultCode === 0) {
-        dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }))
+        dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }));
       } else {
-        return rejectWithValue(null)
+        return rejectWithValue(null);
       }
     } catch (err: unknown) {
       // handleServerNetworkError(err, dispatch);
-      return rejectWithValue(null)
+      return rejectWithValue(null);
     } finally {
-      return { isInitialized: true }
+      return { isInitialized: true };
     }
-  })
+  }
+);
 
-export const appThunks = { initializeAppTC }
-
+export const appThunks = { initializeAppTC };

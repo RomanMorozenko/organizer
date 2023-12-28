@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { TodolistsList } from "features/todolists-list/todolists/TodolistsList";
 import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar";
@@ -6,24 +6,17 @@ import { useSelector } from "react-redux";
 import { appThunks } from "app/app.reducer";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Login } from "features/auth/Login";
-import { authThunks } from "features/auth/auth.reducer";
-import {
-  AppBar,
-  Button,
-  CircularProgress,
-  Container,
-  IconButton,
-  LinearProgress,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import { Menu } from "@mui/icons-material";
+import { CircularProgress, Container } from "@mui/material";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { authSelectors } from "features/auth";
 import { appSelectors } from "app";
+import { Header } from "components/Header";
+import { MainPage } from "pages/main";
+import { CryptoPage } from "pages/crypto";
+import { CurrencyPage } from "pages/currency";
+import { WeatherPage } from "features/weather";
 
 function App() {
-  const status = useSelector(appSelectors.selectAppStatus);
   const isInitialized = useSelector(appSelectors.selectIsInitialized);
   const isLoggedIn = useSelector(authSelectors.isLoggedIn);
 
@@ -31,10 +24,6 @@ function App() {
 
   useEffect(() => {
     dispatch(appThunks.initializeAppTC());
-  }, []);
-
-  const logoutHandler = useCallback(() => {
-    dispatch(authThunks.logOutTC());
   }, []);
 
   if (!isLoggedIn && !isInitialized) {
@@ -49,23 +38,14 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <ErrorSnackbar />
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton edge="start" color="inherit" aria-label="menu">
-              <Menu />
-            </IconButton>
-            <Typography variant="h6">News</Typography>
-            {isLoggedIn && (
-              <Button color="inherit" onClick={logoutHandler}>
-                Log out
-              </Button>
-            )}
-          </Toolbar>
-          {status === "loading" && <LinearProgress />}
-        </AppBar>
+        <Header />
         <Container fixed>
           <Routes>
-            <Route path={"/"} element={<TodolistsList />} />
+            <Route path={"/"} element={<MainPage />} />
+            <Route path={"/todolist"} element={<TodolistsList />} />
+            <Route path={"/crypto"} element={<CryptoPage />} />
+            <Route path={"/currency"} element={<CurrencyPage />} />
+            <Route path={"/weather"} element={<WeatherPage />} />
             <Route path={"/login"} element={<Login />} />
           </Routes>
         </Container>

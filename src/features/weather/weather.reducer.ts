@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { autocompleteAPI } from "common/api/autocomplete-api";
 import { weatherAPI } from "common/api/weather-api";
 import { createAppAsyncThunk } from "common/utils/create-app-async-thunk";
 
@@ -6,12 +7,14 @@ type WeatherStateType = {
   city: string;
   temp: string;
   description: string;
+  autocompleteValues: string[];
 };
 
 const initialState: WeatherStateType = {
   city: "",
   temp: "",
   description: "",
+  autocompleteValues: [],
 };
 
 const slice = createSlice({
@@ -19,14 +22,40 @@ const slice = createSlice({
   initialState,
   reducers: {
     setWeatherData(state, action: PayloadAction<SetWeatherDataActionType>) {
-      return action.payload;
+      return {
+        ...state,
+        city: action.payload.city,
+        description: action.payload.description,
+        temp: action.payload.temp,
+      };
+    },
+    setAutocompleteValues(state, action: PayloadAction<string>) {
+      state.autocompleteValues.push(action.payload);
     },
   },
 });
 
 export const weatherReducer = slice.reducer;
 
-const { setWeatherData } = slice.actions;
+const { setWeatherData, setAutocompleteValues } = slice.actions;
+
+export const getAutoComplete = createAppAsyncThunk<any, string>(
+  "weather/getAutoComplete",
+  async (inputValue, thunkAPI) => {
+    const { dispatch, rejectWithValue } = thunkAPI;
+    try {
+      let res = await autocompleteAPI(inputValue);
+      res.data.results.forEach((item: any) => {
+        if (item.city && item.city.toLowerCase().includes(inputValue.toLowerCase())) {
+          dispatch(setAutocompleteValues(`${item.city},${item.country}`));
+        }
+        return null;
+      });
+    } catch (error) {
+      return rejectWithValue(null);
+    }
+  }
+);
 
 export const getWeather = createAppAsyncThunk<any, GetWeatherArgsType>("weather/getWeather", async (arg, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI;

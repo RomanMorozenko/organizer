@@ -17,11 +17,7 @@ export const WeatherPage = () => {
     getLocation();
   }, []);
 
-  return (
-    <div className={s.container}>
-      <WeatherModule />
-    </div>
-  );
+  return <WeatherModule />;
 };
 
 const WeatherModule = () => {
@@ -29,11 +25,13 @@ const WeatherModule = () => {
   const city = useSelector(weatherSelectors.city);
   const description = useSelector(weatherSelectors.description);
   return (
-    <div>
+    <div className={s.container}>
       <CityInput city={city} />
-      <p>{temperature}</p>
-      <p>{city}</p>
-      <p>{description}</p>
+      <div className={s.display}>
+        <p>City: {city}</p>
+        <p>Temperature: {temperature.toString().split(".")[0]}</p>
+        <p>Description: {description}</p>
+      </div>
     </div>
   );
 };
@@ -55,15 +53,29 @@ export const CityInput = ({ city }: CityInputProps) => {
 
   handleOnChange = debounce(handleOnChange);
 
+  const onSelectChange = (value: string) => {
+    dispatch(getWeather({ city: value }));
+  };
+
   return (
     <Autocomplete
       disablePortal
       id="combo-box-demo"
       options={autocompleteValues}
-      sx={{ width: 300 }}
-      renderInput={(params) => (
-        <TextField {...params} label="City" value={inputValue} onChange={(e) => handleOnChange(e.target.value)} />
-      )}
+      onChange={(e, value) => onSelectChange(value || "")}
+      renderOption={(props, option) => {
+        const newKey = Math.random();
+        return (
+          <li {...props} key={newKey}>
+            {option}
+          </li>
+        );
+      }}
+      renderInput={(params) => {
+        return (
+          <TextField {...params} label="City" value={inputValue} onChange={(e) => handleOnChange(e.target.value)} />
+        );
+      }}
     />
   );
 };

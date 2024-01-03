@@ -12,7 +12,7 @@ import { authSelectors } from "features/auth";
 import { appSelectors } from "app";
 import { Header } from "components/Header";
 import { MainPage } from "pages/main";
-import { CryptoPage } from "pages/crypto";
+import { CryptoPage } from "features/crypto";
 import { CurrencyPage } from "pages/currency";
 import { WeatherPage } from "features/weather";
 
